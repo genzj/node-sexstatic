@@ -1,9 +1,11 @@
-# Ecstatic [![build status](https://secure.travis-ci.org/jesusabdullah/node-ecstatic.png)](http://travis-ci.org/jesusabdullah/node-ecstatic)
-
-![](http://imgur.com/vhub5.png)
+# Node-Sexstatic
 
 A simple static file server middleware. Use it with a raw http server,
 express/connect, or flatiron/union!
+
+Also adds the ability to arbitrarily modify output HTML for whatever reason.
+
+I may or may not extend this with further addons in the future.
 
 # Examples:
 
@@ -12,10 +14,10 @@ express/connect, or flatiron/union!
 ``` js
 var http = require('http');
 var express = require('express');
-var ecstatic = require('ecstatic');
+var sexstatic = require('sexstatic');
 
 var app = express();
-app.use(ecstatic({ root: __dirname + '/public' }));
+app.use(sexstatic({ root: __dirname + '/public' }));
 http.createServer(app).listen(8080);
 
 console.log('Listening on :8080');
@@ -25,41 +27,38 @@ console.log('Listening on :8080');
 
 ``` js
 var union = require('union');
-var ecstatic = require('ecstatic');
+var sexstatic = require('sexstatic');
+
+function inject_script(src)
+{
+  var index = src.indexOf("</body");
+  if (index == -1) return src;
+  var out = src.substr(0, index);
+  out += '<script type="text/javascript" src="hello-world.js"></script>' + src.substr(index);
+  return out;
+}
 
 union.createServer({
   before: [
-    ecstatic({ root: __dirname + '/public' }),
+    sexstatic({ root: __dirname + '/public', modifyFunctions: [ inject_script ] }),
   ]
 }).listen(8080);
 
 console.log('Listening on :8080');
 ```
 
-## stock http server
-
-``` js
-var http = require('http');
-var ecstatic = require('ecstatic');
-
-http.createServer(
-  ecstatic({ root: __dirname + '/public' })
-).listen(8080);
-
-console.log('Listening on :8080');
-```
 ### fall through
 To allow fall through to your custom routes:
 
 ```js
-ecstatic({ root: __dirname + '/public', handleError: false })
+sexstatic({ root: __dirname + '/public', handleError: false })
 ```
 
 # API:
 
-## ecstatic(opts);
+## sexstatic(opts);
 
-Pass ecstatic an options hash, and it will return your middleware!
+Pass sexstatic an options hash, and it will return your middleware!
 
 ```js
 var opts = {
@@ -71,14 +70,16 @@ var opts = {
              humanReadable : true,
              si            : false,
              defaultExt    : 'html',
-             gzip          : false
+             gzip          : false,
+             modifyFunctions      : [],
+             extras: {...}
            }
 ```
 
 If `opts` is a string, the string is assigned to the root folder and all other
 options are set to their defaults.
 
-### `opts.root` 
+### `opts.root`
 
 `opts.root` is the directory you want to serve up.
 
@@ -124,43 +125,68 @@ to resolve to `./public/a-file.html`, set this to `true`. If you want
 
 ### `opts.gzip`
 
-Set `opts.gzip === true` in order to turn on "gzip mode," wherein ecstatic will
+Set `opts.gzip === true` in order to turn on "gzip mode," wherein sexstatic will
 serve `./public/some-file.js.gz` in place of `./public/some-file.js` when the
-gzipped version exists and ecstatic determines that the behavior is appropriate.
+gzipped version exists and sexstatic determines that the behavior is appropriate.
 
 ### `opts.handleError`
 
 Turn **off** handleErrors to allow fall-through with `opts.handleError === false`, Defaults to **true**.
 
+### `opts.modifyFunctions`
+
+Passes an array of functions that will be performed on HTML text before it's sent to the client.
+
+### `opts.extras`
+
+Passes a dictionary containing additional static, but internal files kept as strings that sexstatic will
+be able to serve. ex:
+
+```js
+  ecstatic({
+  root: this.root,
+  cache: this.cache,
+  showDir: this.showDir,
+  autoIndex: this.autoIndex,
+  defaultExt: this.ext,
+  modifyFunctions: [
+  addReloadScript
+  ],
+  extras: {
+    'http-test.js': "file contents",
+    'ws.json': {
+      'content-type': 'text/json',
+      'content': JSON.stringify({
+        port: 8086,
+        path: this.root,
+        additional: "what happens in vegas, stays in vegas."
+        })
+      }
+    }
+  })
+```
+
 ## middleware(req, res, next);
 
 This works more or less as you'd expect.
 
-### ecstatic.showDir(folder);
+### sexstatic.showDir(folder);
 
-This returns another middleware which will attempt to show a directory view. Turning on auto-indexing is roughly equivalent to adding this middleware after an ecstatic middleware with autoindexing disabled.
+This returns another middleware which will attempt to show a directory view. Turning on auto-indexing is roughly equivalent to adding this middleware after an sexstatic middleware with autoindexing disabled.
 
-### `ecstatic` command
+### `sexstatic` command
 
 to start a standalone static http server,
-run `npm install -g ecstatic` and then run `ecstatic [dir?] [options] --port PORT`
+run `npm install -g sexstatic` and then run `sexstatic [dir?] [options] --port PORT`
 all options work as above, passed in [optimist](https://github.com/substack/node-optimist) style.
 `port` defaults to `8000`. If a `dir` or `--root dir` argument is not passed, ecsatic will
 serve the current dir.
 
-# Tests:
-
-Ecstatic has a fairly extensive test suite. You can run it with:
-
-```sh
-$ npm test
-```
-
 # Contribute:
 
-Without outside contributions, ecstatic would wither and die! Before
-contributing, take a quick look at the contributing guidelines in
-./CONTRIBUTING.md . They're relatively painless, I promise.
+Don't! Contribute back to the project that this module is forked from. This module is built for a specific use
+case and I'd rather not care about the parent.. Go ahead and use it for your projects though, if you'd
+like.
 
 # License:
 

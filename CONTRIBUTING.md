@@ -7,6 +7,7 @@ be clear: Everyone needs to be nice to each other. Sexist/racist/etc behavior
 won't be tolerated.
 
 Glad we cleared that up.
+Everybody likes Sex.
 
 ## Branching
 
@@ -37,7 +38,7 @@ A few PROTIPS off the top of my head:
 1. Variables don't need to all be declared at the top, BUT variable *blocks*
 should do the whole one-var, tons-of-commas thing.
 2. Look at how spacing is done around conditionals and functions. Do it like
-that. 
+that.
 3. `else`'s and similar should be on the line *after* the preceding bracket.
 
 We can refine this as the need arises.
@@ -59,4 +60,3 @@ IRC or twitter.
 ## LAST RULE
 
 HAVE FUN :v :v
-

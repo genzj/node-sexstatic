@@ -1,12 +1,12 @@
 {
-  "author": "Joshua Holbrook <josh@nodejitsu.com> (http://jesusabdullah.net)",
-  "name": "ecstatic",
-  "description": "A simple static file server middleware that works with both Express and Flatiron",
-  "version": "0.5.7",
-  "homepage": "https://github.com/jesusabdullah/node-ecstatic",
+  "author": "Contribution by Graham S (gstack on github) - Original package by Joshua Holbrook <josh@nodejitsu.com> (http://jesusabdullah.net)",
+  "name": "sexstatic",
+  "description": "A simple static file server middleware that works with both Express and Flatiron & adds support for modifying the contents of HTML responses inflight.",
+  "version": "0.6.0",
+  "homepage": "https://github.com/gstack/node-sexstatic",
   "repository": {
     "type": "git",
-    "url": "git@github.com:jesusabdullah/node-ecstatic.git"
+    "url": "git@github.com:gstack/node-sexstatic.git"
   },
   "main": "./lib/ecstatic.js",
   "scripts": {
