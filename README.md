@@ -4,8 +4,62 @@ A simple static file server middleware. Use it with a raw http server,
 express/connect, or flatiron/union!
 
 Also adds the ability to arbitrarily modify output HTML for whatever reason.
+And adding additional:
+  simple url -> string handlers
+  simple url -> function handlers
 
-I may or may not extend this with further addons in the future.
+see opts.extras if you wanna get what i'm talking about
+
+I may or may not extend this with further addons in the future to suit my needs.
+
+# New stuff
+```js
+var sexstatic = require('node-sexstatic');
+var http = require('http'),
+opts = require('minimist')(process.argv.slice(2)),
+port = opts.port || opts.p || 8000,
+dir = opts.root || opts._[0] || process.cwd();
+
+// new feature #1
+opts.modifyFunctions = [
+  function test(c) {
+    console.log('hello contents');
+    return c;
+  }
+];
+
+// new feature #2
+opts.extras = {
+  'service.html': '<b>oh hello</b>',
+  'service.json': {
+    'content-type': 'text/json',
+    'content': function() {
+      return { args: process.argv };
+    }
+  },
+  'service.rpc': {
+    'content-type': 'text/plain',
+    content: function() {
+      var well = '-- lmao';
+      return function() {
+        return '~* so meta '+well+'*~';
+      };
+    }
+  }
+};
+
+if (opts.help || opts.h) {
+  var u = console.error;
+  u('usage: sexstatic [dir] {options} --port PORT');
+  u('see https://npm.im/sexstatic for more docs');
+  return;
+}
+
+http.createServer(sexstatic(dir, opts))
+.listen(port, function () {
+  console.log('sexstatic serving ' + dir + ' at http://0.0.0.0:' + port);
+});
+```
 
 # Examples:
 

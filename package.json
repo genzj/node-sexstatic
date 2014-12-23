@@ -2,17 +2,17 @@
   "author": "Contribution by Graham S (gstack on github) - Original package by Joshua Holbrook <josh@nodejitsu.com> (http://jesusabdullah.net)",
   "name": "sexstatic",
   "description": "A simple static file server middleware that works with both Express and Flatiron & adds support for modifying the contents of HTML responses inflight.",
-  "version": "0.6.0",
+  "version": "0.6.2",
   "homepage": "https://github.com/gstack/node-sexstatic",
   "repository": {
     "type": "git",
     "url": "git@github.com:gstack/node-sexstatic.git"
   },
-  "main": "./lib/ecstatic.js",
+  "main": "./lib/sexstatic.js",
   "scripts": {
     "test": "tap test/*.js"
   },
-  "bin": "./lib/ecstatic.js",
+  "bin": "./lib/sexstatic.js",
   "keywords": [
     "static",
     "web",
